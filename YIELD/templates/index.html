@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crop Yield Prediction</title>
+</head>
+<body>
+    <h1>Crop Yield Prediction</h1>
+    <form id="prediction-form">
+        <label for="District">District:</label>
+        <input type="text" id="District" name="District"><br><br>
+
+        <label for="Crop">Crop:</label>
+        <input type="text" id="Crop" name="Crop"><br><br>
+
+        <label for="Season">Season:</label>
+        <input type="text" id="Season" name="Season"><br><br>
+
+        <label for="Area">Area (hectares):</label>
+        <input type="number" id="Area" name="Area"><br><br>
+
+        <label for="Soil Type">Soil Type:</label>
+        <input type="text" id="Soil Type" name="Soil Type"><br><br>
+
+        <label for="pH Level">pH Level:</label>
+        <input type="number" id="pH Level" name="pH Level"><br><br>
+
+        <label for="Organic Matter">Organic Matter (%):</label>
+        <input type="number" id="Organic Matter" name="Organic Matter"><br><br>
+
+        <label for="Nitrogen Content">Nitrogen Content (kg/ha):</label>
+        <input type="number" id="Nitrogen Content" name="Nitrogen Content"><br><br>
+
+        <label for="Phosphorus Content">Phosphorus Content (kg/ha):</label>
+        <input type="number" id="Phosphorus Content" name="Phosphorus Content"><br><br>
+
+        <label for="Potassium Content">Potassium Content (kg/ha):</label>
+        <input type="number" id="Potassium Content" name="Potassium Content"><br><br>
+
+        <label for="Irrigation Method">Irrigation Method:</label>
+        <select id="Irrigation Method" name="Irrigation Method">
+            <option value="Drip">Drip</option>
+            <option value="Sprinkler">Sprinkler</option>
+            <option value="Canal">Canal</option>
+            <option value="Tube Well">Tube Well</option>
+        </select><br><br>
+
+        <label for="Water Availability">Water Availability (liters/hectare):</label>
+        <input type="number" id="Water Availability" name="Water Availability"><br><br>
+
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+
+    <h2>Predicted Yield: <span id="predicted-yield"></span></h2>
+
+    <script>
+        function predict() {
+            const data = {
+                "District": document.getElementById("District").value,
+                "Crop": document.getElementById("Crop").value,
+                "Season": document.getElementById("Season").value,
+                "Area (hectares)": parseFloat(document.getElementById("Area").value),
+                "Soil Type": document.getElementById("Soil Type").value,
+                "pH Level": parseFloat(document.getElementById("pH Level").value),
+                "Organic Matter (%)": parseFloat(document.getElementById("Organic Matter").value),
+                "Nitrogen Content (kg/ha)": parseFloat(document.getElementById("Nitrogen Content").value),
+                "Phosphorus Content (kg/ha)": parseFloat(document.getElementById("Phosphorus Content").value),
+                "Potassium Content (kg/ha)": parseFloat(document.getElementById("Potassium Content").value),
+                "Irrigation Method": document.getElementById("Irrigation Method").value,
+                "Water Availability (liters/hectare)": parseFloat(document.getElementById("Water Availability").value)
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("predicted-yield").innerText = data.predicted_yield.toFixed(4);
+            });
+        }
+    </script>
+</body>
+</html>
